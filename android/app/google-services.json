@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "656182842782",
+    "project_id": "aracasistani-3227d",
+    "storage_bucket": "aracasistani-3227d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:656182842782:android:e7fdaa13f911b2473e328f",
+        "android_client_info": {
+          "package_name": "com.example.arac_asistani"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxFm9NmL6kqS-Uuw4Oim-K-FXhw1t2gr4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
