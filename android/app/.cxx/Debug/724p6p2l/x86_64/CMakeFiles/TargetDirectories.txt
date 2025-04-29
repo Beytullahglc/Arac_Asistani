@@ -1,0 +1,2 @@
+D:/Github/Arac_Asistani/android/app/.cxx/Debug/724p6p2l/x86_64/CMakeFiles/edit_cache.dir
+D:/Github/Arac_Asistani/android/app/.cxx/Debug/724p6p2l/x86_64/CMakeFiles/rebuild_cache.dir

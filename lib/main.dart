@@ -1,5 +1,11 @@
+import 'package:arac_asistani/views/aracBilgisiSayfa.dart';
+import 'package:arac_asistani/views/arizaTespitSayfa.dart';
+import 'package:arac_asistani/views/ayarlarSayfa.dart';
+import 'package:arac_asistani/views/gecmisSayfa.dart';
+import 'package:arac_asistani/views/yardımSayfa.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart'; // Firebase Auth importu
 import 'firebase_options.dart';
 
 void main() async {
@@ -46,6 +52,10 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Firebase Authentication'dan mevcut kullanıcıyı al
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    String adSoyad = currentUser?.displayName ?? '';
+
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
@@ -54,24 +64,84 @@ class MyHomePage extends StatelessWidget {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
+            DrawerHeader(
+              decoration: const BoxDecoration(
                 color: Color(0xFFE0E0E0),
               ),
-              child: Text(
-                'Menü',
-                style: TextStyle(
-                  color: Colors.black87,
-                  fontSize: 24,
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Kullanıcının ad ve soyadını göster
+                  Text(
+                    'Hoşgeldiniz,',
+                    style: const TextStyle(
+                      color: Colors.black87,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                   Text(
+                    '$adSoyad',
+                    style: TextStyle(
+                      color: Colors.black87,
+                      fontSize: 24,
+                    ),
+                  ),
+                ],
               ),
             ),
-            const DrawerItem(icon: Icons.home, title: 'Ana Sayfa'),
-            const DrawerItem(icon: Icons.build, title: 'Arıza Tespiti'),
-            const DrawerItem(icon: Icons.directions_car, title: 'Araç Bilgisi'),
-            const DrawerItem(icon: Icons.history, title: 'Geçmiş'),
-            const DrawerItem(icon: Icons.settings, title: 'Ayarlar'),
-            const DrawerItem(icon: Icons.help, title: 'Yardım'),
+            DrawerItem(
+              icon: Icons.home,
+              title: 'Ana Sayfa',
+              onTap: () {
+                Navigator.pop(context); // Menü kapansın
+              },
+            ),
+            DrawerItem(
+              icon: Icons.build,
+              title: 'Arıza Tespiti',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ArizaTespitSayfa()),
+                );
+              },
+            ),
+            DrawerItem(
+              icon: Icons.directions_car,
+              title: 'Araç Bilgisi',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Aracbilgisisayfa()),
+                );
+              },
+            ),
+            DrawerItem(
+              icon: Icons.history,
+              title: 'Geçmiş',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => GecmisSayfa()),
+                );
+              },
+            ),
+            DrawerItem(
+              icon: Icons.settings,
+              title: 'Ayarlar',
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const AyarlarSayfa()));
+              },
+            ),
+            DrawerItem(
+              icon: Icons.help,
+              title: 'Yardım',
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const YardimSayfa()));
+              },
+            ),
           ],
         ),
       ),
@@ -84,27 +154,37 @@ class MyHomePage extends StatelessWidget {
           buildFeatureCard(
             icon: Icons.build,
             label: 'Arıza Tespiti',
-            onTap: () {},
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const ArizaTespitSayfa()));
+            },
           ),
           buildFeatureCard(
             icon: Icons.directions_car,
             label: 'Araç Bilgisi',
-            onTap: () {},
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const Aracbilgisisayfa()));
+            },
           ),
           buildFeatureCard(
             icon: Icons.history,
             label: 'Geçmiş',
-            onTap: () {},
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => GecmisSayfa()));
+            },
           ),
           buildFeatureCard(
             icon: Icons.settings,
             label: 'Ayarlar',
-            onTap: () {},
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const AyarlarSayfa()));
+            },
           ),
           buildFeatureCard(
             icon: Icons.help,
             label: 'Yardım',
-            onTap: () {},
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const YardimSayfa()));
+            },
           ),
         ],
       ),
@@ -131,7 +211,7 @@ class MyHomePage extends StatelessWidget {
               Icon(
                 icon,
                 size: 50,
-                color: Colors.black54, // Daha açık siyah
+                color: Colors.black54,
               ),
               const SizedBox(height: 10),
               Text(
@@ -139,7 +219,7 @@ class MyHomePage extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black54, // Aynı renk, daha açık siyah
+                  color: Colors.black54,
                 ),
               ),
             ],
@@ -153,21 +233,24 @@ class MyHomePage extends StatelessWidget {
 class DrawerItem extends StatelessWidget {
   final IconData icon;
   final String title;
+  final VoidCallback onTap;
 
-  const DrawerItem({super.key, required this.icon, required this.title});
+  const DrawerItem({
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon, color: Colors.black54), // Aynı renk, daha açık siyah
+      leading: Icon(icon, color: Colors.black54),
       title: Text(
         title,
-        style: const TextStyle(color: Colors.black54), // Aynı renk, daha açık siyah
+        style: const TextStyle(color: Colors.black54),
       ),
-      onTap: () {
-        Navigator.pop(context);
-        // Buraya ilgili sayfa navigasyonu eklenecek
-      },
+      onTap: onTap,
     );
   }
 }
